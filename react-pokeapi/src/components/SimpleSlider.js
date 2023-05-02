@@ -7,16 +7,16 @@ import RandomPokemon from "./RandomPokemon";
 export const SimpleSlider = ({ pokemon }) => {
   const settings = {
     dots: true,
-    slidesToShow: 4,
-    slidesToScroll: 1,
+    slidesToShow: 6,
+    slidesToScroll:3,
     draggable: true,
   };
 
   return (
-    <Slider {...settings}>
-      {pokemon.map((pokemon) => (
-        <RandomPokemon pokemon={pokemon} key={pokemon.name} type={pokemon.types[0].type.name}/>
-      ))}
-    </Slider>
+      <Slider {...settings}>
+        {pokemon.map((pokemon) => (
+          <RandomPokemon pokemon={pokemon} key={pokemon.name} type={pokemon.types[0].type.name}/>
+        ))}
+      </Slider>
   );
 };
