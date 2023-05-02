@@ -44,11 +44,11 @@ const GlobalStyles = createGlobalStyle`
    }
 
    .grass{
-    background: #67F70A;
+    background: #78C850;
    }
 
    .ice{
-    background: #66D1E5;
+    background: #58b8c9;
    }
 
    .dragon{
@@ -56,7 +56,7 @@ const GlobalStyles = createGlobalStyle`
    }
 
    .dark{
-    background: #5F4632;
+    background: #705848;
    }
 
    .steel{
@@ -68,11 +68,11 @@ const GlobalStyles = createGlobalStyle`
    }
 
    .electric{
-    background: #F7FF85;
+    background: #F8D030;
    }
 
    .fighting{
-    background: #D36063;
+    background: #C03028;
    }
 
    .flying{
@@ -88,8 +88,8 @@ const GlobalStyles = createGlobalStyle`
    }
 
    .card{
-    padding: 0.5rem;
-    border-radius: 8px;
+    //padding: 0.5rem;
+    //border-radius: 8px;
    }
 
 .slick-prev:before,
