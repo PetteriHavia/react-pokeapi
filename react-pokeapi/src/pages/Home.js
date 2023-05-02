@@ -3,17 +3,22 @@ import axios from "axios";
 import styled from "styled-components";
 import GlobalStyles from "../components/GlobalStyles";
 import { SimpleSlider } from "../components/SimpleSlider";
-import { pokemonURL } from "../api";
+import { pokemonURL, generationURL } from "../api";
+import Search from "../components/Search";
+import Navigation from "../components/Navigation";
 
 const Home = () => {
-  //const [pokemonUrl, setPokemonUrl] = useState([]);
+  const [pokemonUrl, setPokemonUrl] = useState([]);
   const [pokemonData, setPokemonData] = useState([]);
+  const [generation, setGeneration] = useState([]);
 
   const fetchData = async () => {
     //Fetch Axios
-    const response = await axios.get(pokemonURL());
-    //setPokemonUrl(response.data.results);
-    getPokemon(response.data.results);
+    const randomPokemon = await axios.get(pokemonURL());
+    const generation = await axios.get(generationURL());
+    setPokemonUrl(randomPokemon.data.results);
+    setGeneration(generation.data.results);
+    getPokemon(randomPokemon.data.results);
   };
 
   const getPokemon = async (response) => {
@@ -30,21 +35,24 @@ const Home = () => {
     fetchData();
   }, []);
 
-  console.log(pokemonData);
+  console.log(generation);
   return (
-    <Container>
-      <h2>10 Random Pokemons</h2>
-      <SimpleSlider pokemon={pokemonData}/>
-    </Container>
+    <div>
+      <Navigation />
+      <Container>
+        <SimpleSlider pokemon={pokemonData}/>
+      <Search generation={generation} setGeneration={setGeneration}/>
+      </Container>
+    </div>
   );
 };
 
-const Container = styled.div`
-  max-width: 1400px;
-  margin: auto;
 
+const Container = styled.div`
+  margin: auto;
+  padding: 2rem 14rem;
   h2 {
-    padding: 2rem 2rem;
+    padding: 2rem 0rem;
   }
 `;
 
