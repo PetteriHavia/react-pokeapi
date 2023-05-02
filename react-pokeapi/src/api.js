@@ -12,4 +12,7 @@ const getRandomOffset = () => {
 const Offset = getRandomOffset();
 
 //Get 10 pokemons with random offset
-export const pokemonURL = () => `${base_url}pokemon/?offset=${Offset}&limit=5`;
+export const pokemonURL = () => `${base_url}pokemon/?offset=${Offset}&limit=10`;
+
+//Pokemon Generations
+export const generationURL = () => `${base_url}generation/`;
