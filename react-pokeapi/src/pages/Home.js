@@ -3,45 +3,70 @@ import axios from "axios";
 import styled from "styled-components";
 import GlobalStyles from "../components/GlobalStyles";
 import { SimpleSlider } from "../components/SimpleSlider";
-import { pokemonURL, generationURL } from "../api";
+import { randomPokemonURL, generationURL, pokemonURL } from "../api";
 import Search from "../components/Search";
 import Navigation from "../components/Navigation";
+import Pokemon from "../components/Pokemon";
 
 const Home = () => {
   const [pokemonUrl, setPokemonUrl] = useState([]);
-  const [pokemonData, setPokemonData] = useState([]);
+  const [randomData, setRandomData] = useState([]);
   const [generation, setGeneration] = useState([]);
+  const [pokemonData, setPokemonData] = useState([]);
 
   const fetchData = async () => {
     //Fetch Axios
-    const randomPokemon = await axios.get(pokemonURL());
-    const generation = await axios.get(generationURL());
-    setPokemonUrl(randomPokemon.data.results);
-    setGeneration(generation.data.results);
-    getPokemon(randomPokemon.data.results);
+    const randomPokemon = await axios.get(randomPokemonURL());
+    const generationCall = await axios.get(generationURL());
+    const pokemonData = await axios.get(pokemonURL());
+    
+    //setPokemonUrl(randomPokemon.data.results);
+    getRandomPokemon(randomPokemon.data.results);
+    getGeneration(generationCall.data.results);
+    getPokemon(pokemonData.data.results);
   };
 
+
+  //Get pokemon url
   const getPokemon = async (response) => {
     response.map(async (item) => {
       const response = await axios.get(item.url);
-      setPokemonData((state) => {
-        state = [...state, response.data];
-        return state;
-      });
+      setPokemonData((state) => [...state, response.data]);
     });
+  }
+
+  //Get random pokemon url
+  const getRandomPokemon = async (response) => {
+    response.map(async (item) => {
+      const response = await axios.get(item.url);
+      setRandomData((state) => [...state, response.data]);
+      });
   };
+
+  //Get generation url
+  const getGeneration = async (response) => {
+    response.map(async (item) => {
+      const response = await axios.get(item.url);
+      setGeneration((state) => [...state, response.data]);
+      });
+  };
+
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  console.log(generation);
   return (
     <div>
       <Navigation />
       <Container>
-        <SimpleSlider pokemon={pokemonData}/>
+        {/*<SimpleSlider randomPokemon={randomData}/>*/}
       <Search generation={generation} setGeneration={setGeneration}/>
+      <PokemonGrid>
+        {pokemonData.map((pokemon) => (
+          <Pokemon data={pokemon} setPokemonData={setPokemonData} key={pokemon.id} type={pokemon.types[0].type.name}/>
+        ))}
+      </PokemonGrid>
       </Container>
     </div>
   );
@@ -52,12 +77,14 @@ const Container = styled.div`
   margin: auto;
   padding: 2rem 14rem;
   h2 {
-    padding: 2rem 0rem;
+    //padding: 1rem 0rem;
   }
 `;
 
-const GameContainer = styled.div`
+const PokemonGrid = styled.div`
   display: grid;
+  justify-content: space-between;
+  margin-top: 5rem;
   grid-template-columns: repeat(
     auto-fit,
     minmax(300px, 1fr)
