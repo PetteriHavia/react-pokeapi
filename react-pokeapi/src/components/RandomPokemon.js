@@ -2,11 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 const RandomPokemon = ({ pokemon, type }) => {
-  const cardColor = type;
-
   return (
     <CardContainer>
-      <div className={`${cardColor} card`}>
+      <div className={`${type}`}>
         <PokeNumber>
           <h3># {pokemon.id}</h3>
         </PokeNumber>
