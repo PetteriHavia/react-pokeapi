@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
 import RandomPokemon from "./RandomPokemon";
 
-export const SimpleSlider = ({ pokemon }) => {
+export const SimpleSlider = ({ randomPokemon }) => {
   const settings = {
     dots: true,
     slidesToShow: 6,
@@ -14,7 +14,7 @@ export const SimpleSlider = ({ pokemon }) => {
 
   return (
       <Slider {...settings}>
-        {pokemon.map((pokemon) => (
+        {randomPokemon.map((pokemon) => (
           <RandomPokemon pokemon={pokemon} key={pokemon.name} type={pokemon.types[0].type.name}/>
         ))}
       </Slider>
