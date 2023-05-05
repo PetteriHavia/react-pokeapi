@@ -92,6 +92,13 @@ const GlobalStyles = createGlobalStyle`
     //border-radius: 8px;
    }
 
+   .type{
+    margin: 0rem .2rem;
+    width: 100px;
+    border-radius: 8px;
+    color: white;
+   }
+
 .slick-prev:before,
 .slick-next:before {
   color: #1583eb;
