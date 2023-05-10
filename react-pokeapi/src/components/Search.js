@@ -2,12 +2,31 @@ import React from "react";
 import styled from "styled-components";
 import search from "../images/search.svg";
 import arrow from '../images/Arrow-down.svg'
+import { selectedGenerationURL } from "../api";
+import axios from "axios";
 
-const Search = ({ generation, setGeneration }) => {
+const Search = ({ generation, setGeneration, data, setPokemonData }) => {
 
-  const genSelectHandler = (generation) => {
-    {/*const genUrl = axios.get()*/}
-  } 
+  const genSelectHandler = async () => {
+    const genId = document.getElementById("generation-id").value;
+    const generationData = await axios.get(selectedGenerationURL(genId));
+    getGenPokemon(generationData.data);
+    //console.log(generationData);
+  }; 
+
+  const getGenPokemon = async (response) => {
+    //console.log(response);
+    const newData = [];
+    response.pokemon_species.map(async (item) => {
+      const species = await axios.get(item.url);
+      const varietiesURL = species.data.varieties[0].pokemon.url;
+      const pokemon = await axios.get(varietiesURL);
+      const pokemonData = pokemon.data;
+      newData.push(pokemonData);
+    });
+    console.log(newData)
+    setPokemonData(newData); 
+  };
 
 
   return (
@@ -17,10 +36,10 @@ const Search = ({ generation, setGeneration }) => {
         <img src={search} alt="search" />
       </Icon>
       <SelectDropdown backgroundImage={arrow} onChange={genSelectHandler}>
-        <select id="select-generation">
+        <select id="generation-id">
           <option>Generation</option>
           {generation.map((item) => (
-            <option value={item.name} key={item.id}>
+            <option value={item.id} key={item.id}>
               {item.main_region.name} 
             </option>
           ))}
