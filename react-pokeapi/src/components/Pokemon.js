@@ -20,7 +20,7 @@ const Pokemon = ({ data, setPokemonData, type }) => {
         </CardName>
         <Type>
           {data.types.map((item) => (
-            <div className={`${item.type.name} type`}>
+            <div className={`${item.type.name} type`} key={item.type.name}>
               <h3>{item.type.name}</h3>
             </div>
           ))}
