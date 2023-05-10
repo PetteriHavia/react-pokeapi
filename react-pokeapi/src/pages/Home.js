@@ -19,13 +19,12 @@ const Home = () => {
     const randomPokemon = await axios.get(randomPokemonURL());
     const generationCall = await axios.get(generationURL());
     const pokemonData = await axios.get(pokemonURL());
-    
+
     //setPokemonUrl(randomPokemon.data.results);
-    getRandomPokemon(randomPokemon.data.results);
+    getRandomPokemon(randomPokemon.data.results, );
     getGeneration(generationCall.data.results);
     getPokemon(pokemonData.data.results);
   };
-
 
   //Get pokemon url
   const getPokemon = async (response) => {
@@ -33,14 +32,14 @@ const Home = () => {
       const response = await axios.get(item.url);
       setPokemonData((state) => [...state, response.data]);
     });
-  }
+  };
 
   //Get random pokemon url
   const getRandomPokemon = async (response) => {
     response.map(async (item) => {
       const response = await axios.get(item.url);
       setRandomData((state) => [...state, response.data]);
-      });
+    });
   };
 
   //Get generation url
@@ -48,9 +47,8 @@ const Home = () => {
     response.map(async (item) => {
       const response = await axios.get(item.url);
       setGeneration((state) => [...state, response.data]);
-      });
+    });
   };
-
 
   useEffect(() => {
     fetchData();
@@ -61,17 +59,21 @@ const Home = () => {
       <Navigation />
       <Container>
         {/*<SimpleSlider randomPokemon={randomData}/>*/}
-      <Search generation={generation} setGeneration={setGeneration}/>
-      <PokemonGrid>
-        {pokemonData.map((pokemon) => (
-          <Pokemon data={pokemon} setPokemonData={setPokemonData} key={pokemon.id} type={pokemon.types[0].type.name}/>
-        ))}
-      </PokemonGrid>
+        <Search generation={generation} setGeneration={setGeneration} pokemon={pokemonData} setPokemonData={setPokemonData}/>
+        <PokemonGrid>
+          {pokemonData.map((pokemon) => (
+            <Pokemon
+              data={pokemon}
+              setPokemonData={setPokemonData}
+              key={pokemon.id}
+              type={pokemon.types[0].type.name}
+            />
+          ))}
+        </PokemonGrid>
       </Container>
     </div>
   );
 };
-
 
 const Container = styled.div`
   margin: auto;
