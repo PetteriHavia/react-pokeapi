@@ -1,46 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import search from "../images/search.svg";
-import arrow from '../images/Arrow-down.svg'
-import { selectedGenerationURL } from "../api";
+import searchIcon from "../images/search.svg";
+import arrow from "../images/Arrow-down.svg";
+import { selectedGenerationURL, searchURL } from "../api";
 import axios from "axios";
 
-const Search = ({ generation, setGeneration, data, setPokemonData }) => {
+const Search = ({
+  generation,
+  setPokemonData,
+  searched,
+  setSearched,
+  pokemonData,
+}) => {
 
-  const genSelectHandler = async () => {
-    const genId = document.getElementById("generation-id").value;
+  const [textInput, setTextInput] = useState('');
+
+  //Get selectfield option value
+  const genSelectHandler = async (event) => {
+    const genId = event.target.value;
     const generationData = await axios.get(selectedGenerationURL(genId));
     getGenPokemon(generationData.data);
-    //console.log(generationData);
-  }; 
-
-  const getGenPokemon = async (response) => {
-    //console.log(response);
-    const newData = [];
-    response.pokemon_species.map(async (item) => {
-      const species = await axios.get(item.url);
-      const varietiesURL = species.data.varieties[0].pokemon.url;
-      const pokemon = await axios.get(varietiesURL);
-      const pokemonData = pokemon.data;
-      newData.push(pokemonData);
-    });
-    console.log(newData)
-    setPokemonData(newData); 
   };
 
+  //Change pokemonData when generation from selectfield is selected
+  const getGenPokemon = async (response) => {
+    const newData = await Promise.all(
+      response.pokemon_species.map(async (item) => {
+        const species = await axios.get(item.url);
+        const varietiesURL = species.data.varieties[0].pokemon.url;
+        const pokemon = await axios.get(`${varietiesURL}`);
+        return pokemon.data;
+      })
+    );
+    setPokemonData(newData);
+  };
+
+  //
+  const searchHandler = async () => {
+    const newData = [];
+    const formatSearch = textInput.toLowerCase();
+    const searchCall = await axios.get(searchURL(formatSearch));
+    const test = searchCall.data;
+    newData.push(test);
+    setSearched((state) => [...state, ...newData]);
+    setTextInput('');
+  };
+
+  //Set value for inputText state
+  const handleInputChange = (event) => {
+    setTextInput(event.target.value);
+  };
 
   return (
     <SearchContainer>
-      <input type="text" placeholder="Search Pokemon" />
+      <input
+        type="text"
+        id="search-input"
+        value={textInput}
+        placeholder="Search Pokemon"
+        onChange={handleInputChange}
+      />
       <Icon>
-        <img src={search} alt="search" />
+        <img src={searchIcon} alt="search" onClick={searchHandler} />
       </Icon>
-      <SelectDropdown backgroundImage={arrow} onChange={genSelectHandler}>
-        <select id="generation-id">
+      <SelectDropdown backgroundImage={arrow}>
+        <select id="generation-id" onChange={genSelectHandler}>
           <option>Generation</option>
           {generation.map((item) => (
             <option value={item.id} key={item.id}>
-              {item.main_region.name} 
+              {item.main_region.name}
             </option>
           ))}
         </select>
@@ -101,9 +129,9 @@ const SelectDropdown = styled.div`
     -webkit-appearance: none; /* Remove default arrow */
     -moz-appearance: none;
     appearance: none;
-    background-image: url(${props => props.backgroundImage}); /* Add custom arrow */
+    background-image: url(${(props) => props.backgroundImage}); /* Add custom arrow */
     background-repeat: no-repeat;
-    background-position: right .2rem center; /* Position the arrow */
+    background-position: right 0.2rem center; /* Position the arrow */
   }
   option {
     font-size: 1rem;
