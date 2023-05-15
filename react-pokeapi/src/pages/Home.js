@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import GlobalStyles from "../components/GlobalStyles";
 import { SimpleSlider } from "../components/SimpleSlider";
 import { randomPokemonURL, generationURL, pokemonURL } from "../api";
 import Search from "../components/Search";
@@ -27,12 +26,28 @@ const Home = () => {
   };
 
   //Get pokemon url
+  /*
   const getPokemon = async (response) => {
     response.map(async (item) => {
       const response = await axios.get(item.url);
-      setPokemonData((state) => [...state, response.data]);
+      setPokemonData((state) => [...state, response.data]
+      );
     });
-  };
+  };*/
+
+  const getPokemon = async (response) => {
+    const pokemonData = await Promise.all(
+      response.map(async(item) => {
+        const response = await axios.get(item.url);
+        return response.data;
+      })
+    );
+    setPokemonData((state) => {
+      const newState = [...state, ...pokemonData];
+      newState.sort((a,b) => a.id > b.id ? 1 : -1);
+      return newState;
+    })
+  } 
 
   //Get random pokemon url
   const getRandomPokemon = async (response) => {
@@ -56,7 +71,6 @@ const Home = () => {
 
   return (
     <div>
-      <Navigation />
       <Container>
         {/*<SimpleSlider randomPokemon={randomData}/>*/}
         <Search
@@ -70,7 +84,7 @@ const Home = () => {
         {searched.length ? (
           <>
             <h2>Search Results</h2>
-            <PokemonGrid>
+            <SearchBox>
               {searched.slice().reverse().map((pokemon) => (
                 <Pokemon
                   data={pokemon}
@@ -80,7 +94,7 @@ const Home = () => {
                   pokemonData={pokemonData}
                 />
               ))}
-            </PokemonGrid>
+            </SearchBox>
           </>
         ) : (
           ""
@@ -109,9 +123,12 @@ const Home = () => {
 
 const Container = styled.div`
   margin: auto;
-  padding: 2rem 14rem;
+  padding: 2rem 10rem;
   h2 {
     //padding: 1rem 0rem;
+  }
+  @media (max-width: 1200px) {
+    padding: 2rem 5rem;
   }
 `;
 
@@ -119,10 +136,15 @@ const PokemonGrid = styled.div`
   display: grid;
   justify-content: space-between;
   margin-top: 5rem;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(300px, 1fr)
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)
   ); //repeat 350 minimun space for column, if not enough space then take rest of the space with 1fr
+  grid-column-gap: 3rem;
+  grid-row-gap: 5rem;
+`;
+
+const SearchBox = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-column-gap: 3rem;
   grid-row-gap: 5rem;
 `;
