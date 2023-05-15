@@ -5,19 +5,17 @@ import arrow from "../images/Arrow-down.svg";
 import { selectedGenerationURL, searchURL } from "../api";
 import axios from "axios";
 
-const Search = ({
-  generation,
-  setPokemonData,
-  searched,
-  setSearched,
-  pokemonData,
-}) => {
-
-  const [textInput, setTextInput] = useState('');
+const Search = ({ generation, setPokemonData, searched, setSearched }) => {
+  const [textInput, setTextInput] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   //Get selectfield option value
   const genSelectHandler = async (event) => {
-    const genId = event.target.value;
+    const genId = parseInt(event.target.value);
+    //Check if value is number
+    if (isNaN(genId)) {
+      return;
+    }
     const generationData = await axios.get(selectedGenerationURL(genId));
     getGenPokemon(generationData.data);
   };
@@ -32,18 +30,44 @@ const Search = ({
         return pokemon.data;
       })
     );
-    setPokemonData(newData);
+    setPokemonData(newData.sort((a, b) => (a.id > b.id ? 1 : -1))); //Sort the pokemon by comparing id
   };
 
-  //
+  //Search pokemon
   const searchHandler = async () => {
-    const newData = [];
-    const formatSearch = textInput.toLowerCase();
-    const searchCall = await axios.get(searchURL(formatSearch));
-    const test = searchCall.data;
-    newData.push(test);
-    setSearched((state) => [...state, ...newData]);
-    setTextInput('');
+    if (textInput.length === 0) {
+      return setErrorMessage("Enter Pokemon Name");
+    }
+    try {
+      const newData = [];
+      const formatSearch = textInput.toLowerCase();
+      const searchCall = await axios.get(searchURL(formatSearch));
+      const newPokemon = searchCall.data;
+
+      // Check if the searched Pokemon already exists in the searched state
+      const existingIndex = searched.findIndex(
+        (pokemon) => pokemon.id === newPokemon.id
+      );
+
+      if (existingIndex !== -1) {
+        // Remove the existing Pokemon from the array
+        const updatedSearched = searched.filter(
+          (pokemon) => pokemon.id !== newPokemon.id
+        );
+        setSearched([...updatedSearched, newPokemon]);
+      } else {
+        // Add the new Pokemon to the end of the array
+        setSearched((state) => [...state, newPokemon]);
+      }
+      setTextInput("");
+      setErrorMessage("");
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setErrorMessage("Pokemon was not found");
+      } else {
+        setErrorMessage("An error occurred while searching for the Pokemon");
+      }
+    }
   };
 
   //Set value for inputText state
@@ -52,33 +76,41 @@ const Search = ({
   };
 
   return (
-    <SearchContainer>
-      <input
-        type="text"
-        id="search-input"
-        value={textInput}
-        placeholder="Search Pokemon"
-        onChange={handleInputChange}
-      />
-      <Icon>
-        <img src={searchIcon} alt="search" onClick={searchHandler} />
-      </Icon>
-      <SelectDropdown backgroundImage={arrow}>
-        <select id="generation-id" onChange={genSelectHandler}>
-          <option>Generation</option>
-          {generation.map((item) => (
-            <option value={item.id} key={item.id}>
-              {item.main_region.name}
-            </option>
-          ))}
-        </select>
-      </SelectDropdown>
-    </SearchContainer>
+    <>
+      <ErrorMessage>
+        <span>{errorMessage}</span>
+      </ErrorMessage>
+      <SearchContainer>
+        <input
+          type="text"
+          id="search-input"
+          value={textInput}
+          placeholder="Search Pokemon"
+          onChange={handleInputChange}
+        />
+        <Icon>
+          <img src={searchIcon} alt="search" onClick={searchHandler} />
+        </Icon>
+        <SelectDropdown backgroundImage={arrow}>
+          <select id="generation-id" onChange={genSelectHandler}>
+            <option>Generation</option>
+            {generation.map((item) => (
+              <option value={item.id} key={item.id}>
+                {item.main_region.name}
+              </option>
+            ))}
+          </select>
+        </SelectDropdown>
+      </SearchContainer>
+    </>
   );
 };
 
-const SearchContainer = styled.div`
+const ErrorMessage = styled.div`
   margin-top: 3rem;
+`;
+
+const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   input {
