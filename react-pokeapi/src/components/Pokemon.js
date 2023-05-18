@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles";
+import {Link, useParams} from 'react-router-dom'
 
 
 const Pokemon = ({ data, setPokemonData, type }) => {
+  
   const PokemonCard = ({ data }) => {
     return (
       <Card>
@@ -11,9 +13,11 @@ const Pokemon = ({ data, setPokemonData, type }) => {
           <CardNumber>
             <h2>#{data.id}</h2>
           </CardNumber>
+          <Link to={`/pokemon/${data.id}`}>
           <CardImage>
-            <img src={data.sprites.front_default} alt={data.name} />
+            <img src={data.sprites.other["official-artwork"].front_default} alt={data.name} />
           </CardImage>
+          </Link>
         </CardDetail>
         <CardName>
           <h2>{data.name}</h2>
@@ -38,7 +42,7 @@ const Card = styled.div`
   position: relative;
   border-radius: 8px;
   img {
-    width: 150px;
+    width: 200px;
     object-fit: cover;
     margin: auto;
   }
