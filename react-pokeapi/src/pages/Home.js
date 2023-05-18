@@ -6,6 +6,7 @@ import { randomPokemonURL, generationURL, pokemonURL } from "../api";
 import Search from "../components/Search";
 import Navigation from "../components/Navigation";
 import Pokemon from "../components/Pokemon";
+import { Loading } from "../components/GlobalStyles"
 
 const Home = () => {
   const [randomData, setRandomData] = useState([]);
@@ -147,11 +148,6 @@ const SearchBox = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-column-gap: 3rem;
   grid-row-gap: 5rem;
-`;
-
-const Loading = styled.div`
-  display: flex;
-  justify-content: center;
 `;
 
 export default Home;

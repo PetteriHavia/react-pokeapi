@@ -44,7 +44,7 @@ const GlobalStyles = createGlobalStyle`
    }
 
    .grass{
-    background: #78C850;
+    background: #68ad46;
    }
 
    .ice{
@@ -103,6 +103,12 @@ const GlobalStyles = createGlobalStyle`
 .slick-next:before {
   color: #1583eb;
 }
+
+`;
+
+export const Loading = styled.div`
+    display: flex;
+    justify-content: center;
 `;
 
 
