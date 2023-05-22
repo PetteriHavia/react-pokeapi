@@ -2,12 +2,45 @@ import styled from "styled-components";
 
 const PokemonBio = ({pokemon, type, species}) => {
 
+    //Check for null fields
+    const validateField = (field) => {
+      return field !== null ? field : "No Data";
+    }
+
+    //Get the english version of the flavor text
+    const getFlavorText = (flavorTextArray) => {
+      const englishText = flavorTextArray.find(
+        (item) => item.language.name === "en"
+      );
+      return englishText ? englishText.flavor_text : "This information has not been updated yet";
+    }
+
+    //Validate species
+    const getSpeciesGenera = (generaArray) => {
+      const genera = generaArray.find(
+        (item) => item.language.name === "en"
+      );
+      return genera ? genera.genus : "No Data";
+    }
+
+    const getHabitat = (field) => {
+      if(field === null || field.name === undefined) {
+        return "No Data";
+      }
+      return field.name;
+    }
+
+    const getHeight = (height) => {
+      const cm = (height * 10);
+      const meter = (cm / 100).toFixed(1);
+      return meter;
+    }
 
     return (
       <>
         {species ? (
           <PokemonContainer>
-            <Panel className={`${type}`}>
+            <ImagePanel className={`${type}`}>
               <PokemonNumber>
                 <h2>#{pokemon.id}</h2>
               </PokemonNumber>
@@ -20,36 +53,36 @@ const PokemonBio = ({pokemon, type, species}) => {
               <PokemonName>
                 <h2>{pokemon.name}</h2>
               </PokemonName>
-            </Panel>
+            </ImagePanel>
             <Panel>
               <DataSection>
                 <h2>Biography</h2>
-                <p>{species.flavor_text_entries[0].flavor_text}</p>
+                <p>{getFlavorText(species.flavor_text_entries)}</p>
                 <Detail>
                   <h3>Species:</h3>
-                  <h3>{species.genera[7].genus}</h3>
+                  <h3>{getSpeciesGenera(species.genera)}</h3>
                 </Detail>
                 <Detail>
                   <h3>Generation:</h3>
-                  <h3>{species.generation.name}</h3>
+                  <h3>{validateField(species.generation.name)}</h3>
                 </Detail>
                 <Detail>
                   <h3>Habitat:</h3>
-                  <h3>(species?.habitat?.name)</h3>
+                  <h3>{getHabitat(species?.habitat)}</h3>
                 </Detail>
                 <Detail>
                   <h3>Height:</h3>
-                  <h3>{pokemon.height}</h3>
+                  <h3>{getHeight(pokemon.height)} m</h3>
                 </Detail>
                 <Detail>
                   <h3>Weight:</h3>
-                  <h3>{pokemon.weight}</h3>
+                  <h3>{(pokemon.weight * 0.1).toFixed(1)} kg</h3>
                 </Detail>
                 <Detail>
                   <h3>Ablilities</h3>
                   <Abilities>
-                  {pokemon.abilities.map((item) => (
-                    <h3 key={item.ability.name}>{item.ability.name}</h3>
+                  {pokemon.abilities.map((item, index) => (
+                    <h3 key={index}>{item.ability.name}</h3>
                   ))}
                   </Abilities>
                 </Detail>
@@ -58,19 +91,19 @@ const PokemonBio = ({pokemon, type, species}) => {
                 <h2>Rates</h2>
                 <Detail>
                   <h3>Base EXP:</h3>
-                  <h3>{pokemon.base_experience} EXP</h3>
+                  <h3>{validateField(pokemon.base_experience)}</h3>
                 </Detail>
                 <Detail>
                   <h3>Growth Rate:</h3>
-                  <h3>{species.growth_rate.name}</h3>
+                  <h3>{validateField(species.growth_rate.name)}</h3>
                 </Detail>
                 <Detail>
                   <h3>Capture Rate:</h3>
-                  <h3>{species?.capture_rate}</h3>
+                  <h3>{validateField(species?.capture_rate)}</h3>
                 </Detail>
                 <Detail>
                   <h3>Base Happiness:</h3>
-                  <h3>{species?.base_happiness}</h3>
+                  <h3>{validateField(species?.base_happiness)}</h3>
                 </Detail>
               </DataSection>
             </Panel>
@@ -85,7 +118,6 @@ const PokemonBio = ({pokemon, type, species}) => {
 }
 
 const PokemonNumber = styled.div`
-  //margin: 3rem 0rem 3rem 0rem;
   h2 {
     opacity: 0.4;
     font-size: 3rem;
@@ -107,20 +139,35 @@ const Abilities = styled.div`
 `;
 
 const PokemonImage = styled.div`
-
+  img{
+    width: 100%;
+  }
 `;
 
 const PokemonContainer = styled.div`
   margin-top: 5rem;
   display: flex;
   justify-content: center;
-  padding-left: 16rem;
-  padding-right: 16rem;
+  box-shadow: 0px 0px 14px rgb(0,0,0, .1);
 `;
 
 const Panel = styled.div`
-  padding: 2rem 3.5rem;
+  padding: 2rem 5rem;
+  width: 100%;
+ 
+`;
+
+const ImagePanel = styled.div`
+  padding: 2rem 0rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  h2{
+    color: white;
+  }
 `;
 
 const Detail = styled.div`
