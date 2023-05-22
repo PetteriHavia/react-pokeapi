@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import GlobalStyles from "./GlobalStyles";
-import {Link, useParams} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 
-const Pokemon = ({ data, setPokemonData, type }) => {
+const Pokemon = ({ data, type }) => {
   
   const PokemonCard = ({ data }) => {
     return (

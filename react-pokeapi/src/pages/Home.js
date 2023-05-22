@@ -1,40 +1,23 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { SimpleSlider } from "../components/SimpleSlider";
-import { randomPokemonURL, generationURL, pokemonURL } from "../api";
+import {generationURL, pokemonURL } from "../api";
 import Search from "../components/Search";
-import Navigation from "../components/Navigation";
 import Pokemon from "../components/Pokemon";
 import { Loading } from "../components/GlobalStyles"
 
 const Home = () => {
-  const [randomData, setRandomData] = useState([]);
   const [generation, setGeneration] = useState([]);
   const [pokemonData, setPokemonData] = useState([]);
   const [searched, setSearched] = useState([]);
 
   const fetchData = async () => {
     //Fetch Axios
-    const randomPokemon = await axios.get(randomPokemonURL());
     const generationCall = await axios.get(generationURL());
     const pokemonData = await axios.get(pokemonURL());
-
-    //setPokemonUrl(randomPokemon.data.results);
-    //getRandomPokemon(randomPokemon.data.results);
     getGeneration(generationCall.data.results);
     getPokemon(pokemonData.data.results);
   };
-
-  //Get pokemon url
-  /*
-  const getPokemon = async (response) => {
-    response.map(async (item) => {
-      const response = await axios.get(item.url);
-      setPokemonData((state) => [...state, response.data]
-      );
-    });
-  };*/
 
   const getPokemon = async (response) => {
     const pokemonData = await Promise.all(
@@ -49,14 +32,6 @@ const Home = () => {
       return newState;
     })
   } 
-
-  //Get random pokemon url
-  const getRandomPokemon = async (response) => {
-    response.map(async (item) => {
-      const response = await axios.get(item.url);
-      setRandomData((state) => [...state, response.data]);
-    });
-  };
 
   //Get generation url
   const getGeneration = async (response) => {
@@ -73,7 +48,6 @@ const Home = () => {
   return (
     <div>
       <Container>
-        {/*<SimpleSlider randomPokemon={randomData}/>*/}
         <Search
           generation={generation}
           setGeneration={setGeneration}

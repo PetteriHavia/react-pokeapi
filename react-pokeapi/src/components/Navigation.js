@@ -1,12 +1,14 @@
-import React from "react";
 import styled from "styled-components";
 import pokeball from "../images/pokeball.png";
 import search from "../images/search.svg";
+import {Link} from 'react-router-dom';
 
 const Navigation = () => {
   return (
     <NavContainer>
-      <h3>React PokeApi</h3>
+      <StyledLink to="/">
+        <h3>React PokeApi</h3>
+      </StyledLink>
       <Pokeball>
         <img src={pokeball} alt="pokeball" />
       </Pokeball>
@@ -25,9 +27,15 @@ const NavContainer = styled.div`
   justify-content: space-between;
   background-color: #d84242;
   color: white;
+
   @media (max-width: 1200px) {
     padding: 2rem 2rem;
   }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
 `;
 
 const Pokeball = styled.div`
