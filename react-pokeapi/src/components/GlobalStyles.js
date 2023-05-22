@@ -104,6 +104,11 @@ const GlobalStyles = createGlobalStyle`
   color: #1583eb;
 }
 
+.inner{
+    padding: 5px 0px;
+    background-color: #D84242;
+}
+
 `;
 
 export const Loading = styled.div`
