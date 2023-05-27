@@ -15,6 +15,10 @@ const GlobalStyles = createGlobalStyle`
         font-size: 2rem;
     }
 
+    button{
+        font-family: 'Montserrat', sans-serif;
+    }
+
    .rock{
     background: #776A3E;
    }

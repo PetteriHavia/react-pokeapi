@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import {Link} from 'react-router-dom'
-
+import { Link } from "react-router-dom";
 
 const Pokemon = ({ data, type }) => {
-  
   const PokemonCard = ({ data }) => {
     return (
       <Card>
@@ -12,9 +10,12 @@ const Pokemon = ({ data, type }) => {
             <h2>#{data.id}</h2>
           </CardNumber>
           <Link to={`/pokemon/${data.id}`}>
-          <CardImage>
-            <img src={data.sprites.other["official-artwork"].front_default} alt={data.name} />
-          </CardImage>
+            <CardImage>
+              <img
+                src={data.sprites.other["official-artwork"].front_default}
+                alt={data.name}
+              />
+            </CardImage>
           </Link>
         </CardDetail>
         <CardName>
@@ -54,24 +55,23 @@ const CardNumber = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 1rem;
-  h2{
+  h2 {
     opacity: 0.4;
     font-size: 3.5rem;
   }
-    
 `;
 
 const CardName = styled.div`
   text-transform: capitalize;
-  h2{
-    margin-top: .5rem;
+  h2 {
+    margin-top: 0.5rem;
   }
 `;
 
 const CardImage = styled.div`
   position: relative;
   z-index: 10;
-  padding-top:3rem;
+  padding-top: 3rem;
 `;
 
 const Type = styled.div`

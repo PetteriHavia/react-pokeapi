@@ -4,7 +4,7 @@ import styled from "styled-components";
 import {generationURL, pokemonURL } from "../api";
 import Search from "../components/Search";
 import Pokemon from "../components/Pokemon";
-import { Loading } from "../components/GlobalStyles"
+import Loading from '../components/Loading';
 
 const Home = () => {
   const [generation, setGeneration] = useState([]);
@@ -86,9 +86,7 @@ const Home = () => {
               />
             ))
           ) : (
-            <Loading>
-              <p>Loading Data...</p>
-            </Loading>
+            <Loading />
           )}
         </PokemonGrid>
       </Container>
@@ -105,14 +103,16 @@ const Container = styled.div`
   @media (max-width: 1200px) {
     padding: 2rem 5rem;
   }
+  @media (max-width: 600px) {
+    padding: 2rem 1rem;
+  }
 `;
 
 const PokemonGrid = styled.div`
   display: grid;
   justify-content: space-between;
   margin-top: 5rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)
-  ); //repeat 350 minimun space for column, if not enough space then take rest of the space with 1fr
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-column-gap: 3rem;
   grid-row-gap: 5rem;
 `;
