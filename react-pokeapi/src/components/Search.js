@@ -139,9 +139,6 @@ const Icon = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  img {
-    width: 100%;
-  }
 `;
 
 const SelectDropdown = styled.div`

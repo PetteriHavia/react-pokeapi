@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { pokemonDetails, searchURL } from "../api";
+import { searchURL } from "../api";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import PokemonBio from "./PokemonBio";
 import PokemonStats from "./PokemonStats";
+import Loading from "./Loading";
 
 const PokemonDetails = () => {
   const [pokemon, setPokemon] = useState(null);
@@ -47,16 +48,21 @@ const PokemonDetails = () => {
           <PokemonStats pokemon={pokemon} species={species} />
         </Content>
       ) : (
-        <div>
-          <p>Loading Data...</p>
-        </div>
+        <Loading />
       )}
     </>
   );
 };
 
 const Content = styled.div`
-  padding: 0rem 16rem;
+  padding: 0rem 10rem;
+  @media (max-width: 1200px) {
+    padding: 0rem 2rem;
+  }
+
+  @media (max-width: 600px) {
+    padding: 0rem 1rem;
+  }
 `;
 
 export default PokemonDetails;
