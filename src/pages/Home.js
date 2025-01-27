@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import {generationURL, pokemonURL } from "../api";
+import { generationURL, pokemonURL } from "../api";
 import Search from "../components/Search";
 import Pokemon from "../components/Pokemon";
 import Loading from '../components/Loading';
@@ -11,27 +11,19 @@ const Home = () => {
   const [pokemonData, setPokemonData] = useState([]);
   const [searched, setSearched] = useState([]);
 
-  const fetchData = async () => {
-    //Fetch Axios
-    const generationCall = await axios.get(generationURL());
-    const pokemonData = await axios.get(pokemonURL());
-    getGeneration(generationCall.data.results);
-    getPokemon(pokemonData.data.results);
-  };
-
   const getPokemon = async (response) => {
     const pokemonData = await Promise.all(
-      response.map(async(item) => {
+      response.map(async (item) => {
         const response = await axios.get(item.url);
         return response.data;
       })
     );
     setPokemonData((state) => {
       const newState = [...state, ...pokemonData];
-      newState.sort((a,b) => a.id > b.id ? 1 : -1);
+      newState.sort((a, b) => a.id > b.id ? 1 : -1);
       return newState;
     })
-  } 
+  }
 
   //Get generation url
   const getGeneration = async (response) => {
@@ -42,8 +34,15 @@ const Home = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      //Fetch Axios
+      const generationCall = await axios.get(generationURL());
+      const pokemonData = await axios.get(pokemonURL());
+      getGeneration(generationCall.data.results);
+      getPokemon(pokemonData.data.results);
+    };
     fetchData();
-  }, [setPokemonData, setSearched]);
+  }, []);
 
   return (
     <div>
@@ -97,9 +96,7 @@ const Home = () => {
 const Container = styled.div`
   margin: auto;
   padding: 2rem 10rem;
-  h2 {
-    //padding: 1rem 0rem;
-  }
+
   @media (max-width: 1200px) {
     padding: 2rem 5rem;
   }
