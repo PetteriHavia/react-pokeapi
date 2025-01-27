@@ -58,7 +58,7 @@ const Home = () => {
         {searched.length ? (
           <>
             <h2>Search Results</h2>
-            <SearchBox>
+            <Grid>
               {searched.slice().reverse().map((pokemon) => (
                 <Pokemon
                   data={pokemon}
@@ -68,12 +68,12 @@ const Home = () => {
                   pokemonData={pokemonData}
                 />
               ))}
-            </SearchBox>
+            </Grid>
           </>
         ) : (
           ""
         )}
-        <PokemonGrid>
+        <Grid>
           {pokemonData.length > 0 ? (
             pokemonData.map((pokemon) => (
               <Pokemon
@@ -87,7 +87,7 @@ const Home = () => {
           ) : (
             <Loading />
           )}
-        </PokemonGrid>
+        </Grid>
       </Container>
     </div>
   );
@@ -105,18 +105,11 @@ const Container = styled.div`
   }
 `;
 
-const PokemonGrid = styled.div`
+const Grid = styled.div`
   display: grid;
   justify-content: space-between;
-  margin-top: 5rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-column-gap: 3rem;
-  grid-row-gap: 5rem;
-`;
-
-const SearchBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-column-gap: 3rem;
   grid-row-gap: 5rem;
 `;
